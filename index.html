@@ -329,7 +329,8 @@ footer{border-top:1px solid #e7dccd;padding:26px;text-align:center;
   it about the CGPA cutoff, the PPO rules, or the dress code.</p>
   <a class="cta" href="https://t.me/KathorAI_bot" target="_blank"
     rel="noopener">Open @KathorAI_bot →</a>
-  <p class="presenter">Respectfully presented to the Placement Committee,
+  <p class="presenter">Respectfully presented to the Placement
+  <span id="revealWord" style="cursor:default">Committee</span>,
   IIM Rohtak</p>
 </section>
 
@@ -401,6 +402,34 @@ function startChat(){
   setTimeout(()=>{playing=false;},t);
 }
 document.getElementById('replay').addEventListener('click',startChat);
+
+/* ---------- hidden dashboard reveal (Ctrl/Cmd+Shift+D) ---------- */
+(function(){
+  // The dashboard URL, lightly obfuscated (NOT stored as plain text in the
+  // page source) so a casual "view source" or in-page text search won't
+  // surface it. The keyboard shortcut itself is the only gate.
+  var enc = "aHR0cHM6Ly90aGVsaXZpbmdzb2ZhLnB5dGhvbmFueXdoZXJlLmNvbS9kYXNoYm9hcmQvM2JhZTMzZDAyNGUxYWE1NzQyZGM1MTAzZGNlYzU0ZWY0ZWZjNWVmNjNlZDU3MDNi";
+  var target = null;
+  try { target = atob(enc); } catch(e) {}
+
+  var unlocked = false;
+  window.addEventListener('keydown', function(e){
+    if(unlocked) return;
+    var combo = (e.ctrlKey||e.metaKey) && e.shiftKey &&
+      (e.key === 'D' || e.key === 'd');
+    if(!combo || !target) return;
+    e.preventDefault();
+    unlocked = true;
+    var w = document.getElementById('revealWord');
+    w.style.textDecoration = 'underline';
+    w.style.textDecorationColor = '#d4af6a';
+    w.style.cursor = 'pointer';
+    w.addEventListener('click', function(){
+      window.open(target, '_blank', 'noopener');
+    });
+    window.open(target, '_blank', 'noopener');
+  });
+})();
 /* start chat when demo scrolls into view (if reveal already happened) */
 const demoObs=new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting&&document.body.classList.contains('revealed')){
